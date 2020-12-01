@@ -3,9 +3,18 @@ package com.meg.countries.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.meg.countries.model.CountriesService
 import com.meg.countries.model.Country
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 class ListViewModel : ViewModel() {
+
+    private val countriesService = CountriesService()
+    private val disposable = CompositeDisposable()
 
     val _countries = MutableLiveData<List<Country>>()
     val countries : LiveData<List<Country>>
@@ -21,20 +30,29 @@ class ListViewModel : ViewModel() {
     }
 
     private fun fetchCountries() {
-        val mockData = listOf(Country("CountryA"),
-            Country("CountryB"),
-            Country("CountryC"),
-            Country("CountryD"),
-            Country("CountryE"),
-            Country("CountryF"),
-            Country("CountryG"),
-            Country("CountryH"),
-            Country("CountryI")
-        )
+        _loading.value = true
+        disposable.add(
+            countriesService.getCountries()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<List<Country>> () {
+                    override fun onSuccess(value: List<Country>?) {
+                        _countries.value = value
+                        _countryLoadError.value = false
+                        _loading.value = false
+                    }
 
-        _countryLoadError.value = false
-        _loading.value = false;
-        _countries.value = mockData
+                    override fun onError(e: Throwable?) {
+                        _countryLoadError.value = true
+                        _loading.value = false
+                    }
+
+                })
+        )
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
+    }
 }
