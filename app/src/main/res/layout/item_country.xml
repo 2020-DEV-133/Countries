@@ -4,13 +4,40 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <ImageView
+        android:id="@+id/countryFlag"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_launcher_round"
+        android:padding="@dimen/dimen8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+     <TextView
+         android:id="@+id/countryName"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:text="India"
+         android:paddingTop="@dimen/dimen8"
+         style="@style/Title"
+         app:layout_constraintStart_toEndOf="@+id/countryFlag"
+         app:layout_constraintTop_toTopOf="parent"
+         app:layout_constraintBottom_toTopOf="@+id/countryCapital"
+         app:layout_constraintEnd_toEndOf="parent"
+         />
+
     <TextView
-        android:id="@+id/countryName"
+        android:id="@+id/countryCapital"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dimen16"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Delhi"
+        android:paddingBottom="@dimen/dimen8"
+        style="@style/Body"
+        app:layout_constraintStart_toEndOf="@+id/countryFlag"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countryName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

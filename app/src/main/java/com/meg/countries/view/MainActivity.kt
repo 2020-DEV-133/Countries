@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.refresh()
 
         initViews()
+        refresh()
         observeData()
     }
 
@@ -58,5 +59,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun refresh() {
+        swipeRefreshLayout.setOnRefreshListener {
+            swipeRefreshLayout.isRefreshing = false
+            viewModel.refresh()
+        }
     }
 }
